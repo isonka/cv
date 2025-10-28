@@ -1,0 +1,445 @@
+/* Same iOS-style modal as app details */
+.facetime-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0);
+  transition: opacity 0.3s ease, background 0.3s ease;
+}
+
+.facetime-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+  background: rgba(0, 0, 0, 0.9);
+  transition: opacity 0.3s ease, background 0.3s ease;
+}
+
+.facetime-content {
+  position: fixed;
+  background: #000;
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  
+  /* Start at icon's exact position and size */
+  left: var(--start-left);
+  top: var(--start-top);
+  width: var(--start-width);
+  height: var(--start-height);
+  border-radius: 22.37%;
+  padding: 0;
+  
+  overflow: hidden;
+  color: white;
+  opacity: 1;
+  
+  /* iOS spring animation */
+  transition: all 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+  
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', sans-serif;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+/* Expand to center */
+.facetime-overlay.show .facetime-content {
+  left: 50vw !important;
+  top: 50vh !important;
+  width: min(90vw, 500px) !important;
+  height: min(80vh, 700px) !important;
+  transform: translate(-50%, -50%);
+  border-radius: 28px !important;
+  
+  box-shadow: 
+    0 40px 120px rgba(0, 0, 0, 0.6),
+    0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Closing animation */
+.facetime-overlay:not(.show) .facetime-content {
+  opacity: 0 !important;
+  left: var(--start-left) !important;
+  top: var(--start-top) !important;
+  width: var(--start-width) !important;
+  height: var(--start-height) !important;
+  padding: 0 !important;
+  transform: translate(0, 0) !important;
+  border-radius: 22.37% !important;
+  overflow: hidden !important;
+}
+
+.facetime-overlay:not(.show) {
+  background: rgba(0, 0, 0, 0) !important;
+}
+
+.facetime-video {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.facetime-user-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scaleX(-1); /* Mirror the video like a real camera */
+}
+
+.facetime-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Camera fallback */
+.camera-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a1a;
+}
+
+.fallback-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.fallback-text {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Status bar overlay - iOS style */
+.facetime-status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent);
+  z-index: 5;
+  font-size: 14px;
+  color: white;
+}
+
+.status-time {
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.connection-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.signal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00ff00;
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.battery-indicator {
+  width: 24px;
+  height: 12px;
+  border: 2px solid white;
+  border-radius: 3px;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.battery-indicator::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: -5px;
+  width: 2px;
+  height: 4px;
+  background: white;
+  border-radius: 0 2px 2px 0;
+}
+
+.battery-level {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  bottom: 1px;
+  width: 70%;
+  background: white;
+  border-radius: 1px;
+}
+
+/* Picture-in-picture for Onur's image */
+.facetime-pip {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 90px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  background: #000;
+}
+
+.facetime-pip-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.pip-name {
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+  padding: 8px 4px 4px;
+}
+
+.facetime-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  padding: 30px 20px 40px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 20;
+}
+
+.control-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.control-button.mute {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.control-button.mute:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.control-button.end {
+  background: #ff3b30;
+  width: 70px;
+  height: 70px;
+  box-shadow: 0 8px 20px rgba(255, 59, 48, 0.5);
+}
+
+.control-button.end:hover {
+  background: #ff453a;
+}
+
+.control-button.video {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.control-button.video:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.control-button:hover {
+  transform: scale(1.1);
+}
+
+.control-button:active {
+  transform: scale(0.95);
+}
+
+.control-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+.control-button.end svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Call Prompt Overlay */
+.call-prompt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 100;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.prompt-message {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.prompt-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(52, 199, 89, 0.2);
+  border-radius: 50%;
+  animation: phoneRing 2s infinite;
+}
+
+.prompt-icon svg {
+  filter: drop-shadow(0 2px 8px rgba(52, 199, 89, 0.6));
+}
+
+@keyframes phoneRing {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  10%, 30% {
+    transform: scale(1.1) rotate(-10deg);
+  }
+  20%, 40% {
+    transform: scale(1.1) rotate(10deg);
+  }
+  50% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.prompt-text {
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.prompt-subtext {
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+}
+
+.prompt-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.prompt-button {
+  padding: 15px 30px;
+  border-radius: 25px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.call-button {
+  background: linear-gradient(135deg, #00c853 0%, #64dd17 100%);
+  color: white;
+  min-width: 180px;
+}
+
+.call-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 200, 83, 0.4);
+}
+
+.cancel-button {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  min-width: 150px;
+}
+
+.cancel-button:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+
+.prompt-button:active {
+  transform: scale(0.95);
+}
+

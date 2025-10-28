@@ -1,0 +1,142 @@
+/* Same iOS-style modal as app details */
+.stats-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0);
+  transition: opacity 0.3s ease, background 0.3s ease;
+}
+
+.stats-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+  background: rgba(0, 0, 0, 0.4);
+  transition: opacity 0.3s ease, background 0.3s ease;
+}
+
+.stats-content {
+  position: fixed;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(40px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  
+  /* Start at icon's exact position and size */
+  left: var(--start-left);
+  top: var(--start-top);
+  width: var(--start-width);
+  height: var(--start-height);
+  border-radius: 22.37%;
+  padding: 0;
+  
+  overflow: hidden;
+  color: white;
+  opacity: 1;
+  
+  /* iOS spring animation */
+  transition: all 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+  
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', sans-serif;
+}
+
+/* Glossy highlight at top */
+.stats-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 28px 28px 0 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Expand to center */
+.stats-overlay.show .stats-content {
+  left: 50vw !important;
+  top: 50vh !important;
+  width: min(90vw, 450px) !important;
+  height: auto !important;
+  padding: 40px !important;
+  transform: translate(-50%, -50%);
+  border-radius: 28px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  
+  box-shadow: 
+    0 40px 120px rgba(0, 0, 0, 0.4),
+    0 15px 40px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Closing animation */
+.stats-overlay:not(.show) .stats-content {
+  opacity: 0 !important;
+  left: var(--start-left) !important;
+  top: var(--start-top) !important;
+  width: var(--start-width) !important;
+  height: var(--start-height) !important;
+  padding: 0 !important;
+  transform: translate(0, 0) !important;
+  border-radius: 22.37% !important;
+  overflow: hidden !important;
+}
+
+.stats-overlay:not(.show) {
+  background: rgba(0, 0, 0, 0) !important;
+}
+
+.stats-title {
+  position: relative;
+  z-index: 10;
+  color: white;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.stat-item {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+}
+
+.stat-label {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: -0.2px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}

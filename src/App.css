@@ -1,0 +1,540 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-size: 400% 400%;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Wallpaper overlay layer */
+.wallpaper-overlay {
+  position: fixed;
+  top: -100px;
+  left: -100px;
+  right: -100px;
+  bottom: -100px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 1;
+  filter: blur(120px);
+  background-size: 150% 150%;
+  background-position: center;
+}
+
+.ios-home-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  position: relative;
+}
+
+.status-bar {
+  height: 54px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  letter-spacing: -0.24px;
+}
+
+.home-indicator {
+  position: fixed;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 134px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 100px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.app-grid-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px;
+  padding-bottom: 100px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 10px;
+}
+
+@media (min-width: 768px) {
+  .app-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .app-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 40px;
+  }
+}
+
+.app-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.app-icon:active {
+  transform: scale(0.95);
+}
+
+.icon-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 22.37%;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
+}
+
+@media (min-width: 768px) {
+  .icon-container {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .icon-container {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+.app-icon:hover .icon-container {
+  transform: scale(1.05);
+  box-shadow: 
+    0 15px 45px rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.15);
+}
+
+.app-name {
+  color: white;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  max-width: 90px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  letter-spacing: -0.08px;
+  line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+  .app-name {
+    font-size: 13px;
+    max-width: 100px;
+  }
+}
+
+.dock {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  padding: 10px 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.10) 100%
+  );
+  backdrop-filter: blur(80px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(80px) saturate(180%) brightness(1.05);
+  border-radius: 28px;
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 25px 70px rgba(0, 0, 0, 0.35),
+    0 5px 15px rgba(0, 0, 0, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  z-index: 100;
+}
+
+.dock-icon {
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.dock-icon-inner {
+  width: 60px;
+  height: 60px;
+  border-radius: 22.37%;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@media (min-width: 768px) {
+  .dock-icon-inner {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+.dock-icon:hover .dock-icon-inner {
+  transform: scale(1.15) translateY(-8px);
+  box-shadow: 
+    0 15px 45px rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.15);
+}
+
+.dock-icon:active .dock-icon-inner {
+  transform: scale(0.9);
+}
+
+.cursor-trail {
+  position: fixed;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+  pointer-events: none;
+  z-index: 9999;
+  animation: trailFade 0.5s ease-out forwards;
+}
+
+@keyframes trailFade {
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Page overlay for app details */
+.app-detail-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0);
+  transition: opacity 0.3s ease, background 0.3s ease;
+}
+
+.app-detail-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+  background: rgba(0, 0, 0, 0.4);
+  transition: opacity 0.3s ease, background 0.3s ease;
+}
+
+.app-detail-content {
+  position: fixed;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(40px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  
+  /* Start at icon's exact position and size */
+  left: var(--start-left);
+  top: var(--start-top);
+  width: var(--start-width);
+  height: var(--start-height);
+  border-radius: 22.37%;
+  padding: 0;
+  
+  overflow: hidden;
+  color: white;
+  opacity: 1;
+  
+  /* iOS spring animation */
+  transition: all 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+  
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', sans-serif;
+}
+
+/* Glossy highlight at top */
+.app-detail-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 28px 28px 0 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Expand to center after a tiny delay (iOS does this) */
+.app-detail-overlay.show .app-detail-content {
+  /* Move to center and expand */
+  left: 50vw !important;
+  top: 50vh !important;
+  width: min(90vw, 600px) !important;
+  height: auto !important;
+  min-height: 400px;
+  max-height: 80vh;
+  padding: 40px !important;
+  transform: translate(-50%, -50%);
+  border-radius: 28px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  
+  box-shadow: 
+    0 40px 120px rgba(0, 0, 0, 0.4),
+    0 15px 40px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Closing animation - when .show is removed, it reverts to original state */
+.app-detail-overlay:not(.show) .app-detail-content {
+  opacity: 0 !important;
+  left: var(--start-left) !important;
+  top: var(--start-top) !important;
+  width: var(--start-width) !important;
+  height: var(--start-height) !important;
+  padding: 0 !important;
+  transform: translate(0, 0) !important;
+  border-radius: 22.37% !important;
+  overflow: hidden !important;
+}
+
+.app-detail-overlay:not(.show) {
+  background: rgba(0, 0, 0, 0) !important;
+}
+
+/* Custom scrollbar for liquid glass effect */
+.app-detail-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.app-detail-content::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 28px 0;
+}
+
+.app-detail-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 100px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.2s ease;
+}
+
+.app-detail-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+  background-clip: padding-box;
+}
+
+/* Hide scrollbar when not hovering the modal */
+.app-detail-content {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.app-detail-content:hover {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.app-detail-content::-webkit-scrollbar-thumb {
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.app-detail-content:hover::-webkit-scrollbar-thumb {
+  opacity: 1;
+}
+
+.detail-header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
+}
+
+.detail-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 22.37%;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-title {
+  font-size: 32px;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.6px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+}
+
+.detail-body {
+  position: relative;
+  z-index: 10;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.2);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+  letter-spacing: -0.08px;
+}
+
+.detail-body h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+  color: white;
+}
+
+.detail-body p {
+  margin-bottom: 12px;
+}
+
+.detail-body ul {
+  list-style: none;
+  padding: 0;
+}
+
+.detail-body li {
+  margin-bottom: 8px;
+  padding-left: 16px;
+  position: relative;
+}
+
+.detail-body li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 300;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.close-button:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 
+    0 6px 16px rgba(0, 0, 0, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.close-button:active {
+  transform: scale(1.0) rotate(90deg);
+}
+

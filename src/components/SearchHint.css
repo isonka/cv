@@ -1,0 +1,255 @@
+.search-hint-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-hint-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.search-hint-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(60px);
+  -webkit-backdrop-filter: blur(60px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 28px;
+  padding: 40px;
+  max-width: 440px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.search-hint-overlay.show .search-hint-card {
+  transform: scale(1) translateY(0);
+}
+
+.hint-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.5);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 15px rgba(102, 126, 234, 0);
+  }
+}
+
+.hint-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.hint-description {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.hint-methods {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.hint-method {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.hint-method:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(4px);
+}
+
+.method-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.method-text {
+  flex: 1;
+}
+
+.method-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.method-desc {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.key-combo {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.hint-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.hint-button {
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.hint-button.secondary {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hint-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.hint-button.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.hint-button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(102, 126, 234, 0.5);
+}
+
+.hint-button:active {
+  transform: scale(0.95);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .search-hint-card {
+    padding: 32px 24px;
+  }
+
+  .hint-title {
+    font-size: 24px;
+  }
+
+  .hint-description {
+    font-size: 15px;
+  }
+
+  .hint-methods {
+    gap: 12px;
+  }
+
+  .hint-method {
+    padding: 12px;
+  }
+
+  .method-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .method-title {
+    font-size: 15px;
+  }
+
+  .method-desc {
+    font-size: 13px;
+  }
+
+  .hint-button {
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+}
+
+/* Animation delays for methods */
+.search-hint-overlay.show .hint-method:nth-child(1) {
+  animation: slideInLeft 0.5s cubic-bezier(0.32, 0.72, 0, 1) 0.2s backwards;
+}
+
+.search-hint-overlay.show .hint-method:nth-child(2) {
+  animation: slideInLeft 0.5s cubic-bezier(0.32, 0.72, 0, 1) 0.3s backwards;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
